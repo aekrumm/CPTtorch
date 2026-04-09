@@ -2,11 +2,11 @@
 
 deviance_loss <- function(datatab,cpt,ccbias=0) {
   datatab <- torch_reshape(datatab,dim(cpt))$add(cpt,ccbias)
-  cpt$log()$mul_(datatab)$sum()$mul(-2)
+  cpt$log()$mul(datatab)$sum()$mul(-2)
 }
 penalty_fun = function(params,which,bias) {
   if (!is.null(params[[which]]))
-    params[[which]]$square()$sum()$mul_(bias)
+    params[[which]]$square()$sum()$mul(bias)
   else
     torch_tensor(0,torch_double(),device=TORCH_DEVICE)
 }
@@ -15,7 +15,7 @@ build_loss_fun <- function (ccbias,penalties) {
   function(dattab,cpt,params) {
     result <- deviance_loss(dattab,cpt,ccbias)
     for (ipar in names(penalties)) {
-      result <- result$add_(
+      result <- result$add(
         penalty_fun(params,ipar,penalties[[ipar]])
       )
     }

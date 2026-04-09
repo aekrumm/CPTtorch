@@ -22,7 +22,7 @@ torch_simplexify_ <- function (x,dim=-1L) {
 }
 torch_simplexify <- function (x,dim=-1L) {
   cpt <- x$abs()
-  cpt$div_(torch_sum(cpt,dim,TRUE))
+  cpt / torch_sum(cpt,dim,TRUE)
 }
 
 
@@ -122,7 +122,7 @@ sumrootk <- function(x) {
 }
 torch_sumrootk <- function(x,dim=-1,keepdim=FALSE,out=NULL) {
   result <- torch_sum(x,dim,keepdim,out)
-  result$div_(sqrt(x$length()/result$length()))
+  result$div(sqrt(x$length()/result$length()))
 }
 
 
@@ -192,12 +192,12 @@ getZeroOp <- function (op) {
 
 ## Define qnorm and pnorm in terms of erf and erfinv
 torch_pnorm <- function (x) {
-  torch_div(x,sqrt(2))$erf_()$add_(1)$div_(2)
+  torch_div(x,sqrt(2))$erf()$add(1)$div(2)
 }
 
 
 torch_qnorm <- function (x) {
-  torch_mul(x,2)$sub_(1)$erfinv_()$mul_(sqrt(2))
+  torch_mul(x,2)$sub(1)$erfinv()$mul(sqrt(2))
 }
 
 

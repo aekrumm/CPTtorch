@@ -223,6 +223,8 @@ Cognitively_Diagnostic_Model <- nn_module(
         loss
       }
 
+      # Re-enabled after fixing all in-place ops in the forward path.
+      # jit_trace preserves gradients for standard forward-pass operations.
       self$lossfn <- jit_trace(raw_fn, example_phi_js)
 
       invisible(self)
