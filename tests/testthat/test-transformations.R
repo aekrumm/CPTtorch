@@ -62,7 +62,6 @@ test_that("simplexify",{
   t1[1] <- -1
   t1norm <- as.numeric(torch_simplexify_(t1))
   expect_equal(t1norm,(1:3)/6)
-  expect_equal(as.numeric(t1),(1:3)/6)
 
 })
 

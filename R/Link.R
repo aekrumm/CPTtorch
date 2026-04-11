@@ -9,16 +9,16 @@ CPT_Link <- torch::nn_module(
     guessP=NULL,
     etWidth=function() {self$K-1},
     high2low=FALSE,
-    device=TORCH_DEVICE,
     private=list(
       k=NA,
       stype=NULL
     ),
-    initialize=function(nstates,guess=NA,slip=NA,high2low=FALSE,...) {
+    initialize=function(nstates,guess=NA,slip=NA,high2low=FALSE,device=TORCH_DEVICE,...) {
       self$K <- nstates
       self$guess <- guess
       self$slip <- slip
       self$high2low <- high2low
+      self$device <- device
       if (!is.null(private$stype)) {
         private$stype <- setpTypeDim(private$stype,K=nstates)
         self$linkscale <- defaultParameter10(private$stype)
@@ -270,7 +270,7 @@ GaussianLink <- torch::nn_module(
         stop("Link Scale not yet set.")
       pt <- torch_pnorm(torch_sub(self$Cuts,et)$div(self$linkScale))
       torch_diff(pt,dim=2,prepend=torch_zeros(nrow(et),1,device=self$device),
-                 append=torch_ones(nrow(et),1,self$device))
+                 append=torch_ones(nrow(et),1,device=self$device))
     },
     private=list(
         stype=setpTypeDim(PType("pos",1)),
@@ -293,8 +293,8 @@ GaussianLink <- torch::nn_module(
 ##     scale=NULL,
 ##     etWidth=function() {K-1},
 ##     link=function(et) {
-##       torch_hstack(et,torch_sum(et,2)$neg_()$add_(1))$
-##         matmul_(self$linkScale)
+##       torch_hstack(et,torch_sum(et,2)$neg()$add(1))$
+##         matmul(self$linkScale)
 ##     },
 ##     private=list(
 ##         stype=PType("cpMat",c(K,K))
