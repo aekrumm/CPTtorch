@@ -90,10 +90,10 @@ CombinationRule <- torch::nn_module(
       self$high2low <- high2low
       self$device <- device
       if (!is.null(self$aType)) {
-        self$aMat <- nn_parameter(defaultParameter10(private$atype, device=TORCH_DEVICE))
+        self$aMat <- nn_parameter(defaultParameter10(private$atype, device=self$device))
       }
       if (!is.null(self$bType)) {
-        self$bMat <-nn_parameter(defaultParameter10(private$btype, device=TORCH_DEVICE))
+        self$bMat <-nn_parameter(defaultParameter10(private$btype, device=self$device))
       }
     },
     forward = function() {

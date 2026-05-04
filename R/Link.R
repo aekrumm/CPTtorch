@@ -207,8 +207,9 @@ SoftmaxLink <- torch::nn_module(
     scale=NULL,
     etWidth=function() {self$K},
     initialize=function(nstates,guess=NA,slip=NA,high2low=FALSE,...,D=1.7) {
-      self$D <- torch_tensor(D, device=self$device)
+      # super first so self$device is set before we build D
       super$initialize(nstates,guess,slip,high2low,...)
+      self$D <- torch_tensor(D, device=self$device)
     },
     link=function(et) {
       nnf_softmax(et$mul(self$D),2)
@@ -223,8 +224,9 @@ GradedResponseLink <- torch::nn_module(
     classname="GradedResponseLink",
     inherit=DifferenceLink,
     initialize=function(nstates,guess=NA,slip=NA,high2low=FALSE,...,D=1.7) {
-      self$D <- torch_tensor(D, device=self$device)
+      # super first so self$device is set before we build D
       super$initialize(nstates,guess,slip,high2low,...)
+      self$D <- torch_tensor(D, device=self$device)
     },
     scale=NULL,
     etWidth=function() {self$K-1},
@@ -241,8 +243,9 @@ PartialCreditLink <- torch::nn_module(
     inherit=StepProbsLink,
     scale=NULL,
     initialize=function(nstates,guess=NA,slip=NA,high2low=FALSE,...,D=1.7) {
-      self$D <- torch_tensor(D, device=self$device)
+      # super first so self$device is set before we build D
       super$initialize(nstates,guess,slip,high2low,...)
+      self$D <- torch_tensor(D, device=self$device)
     },
     etWidth=function() {self$K-1},
     link=function(et) {
